@@ -1,0 +1,6 @@
+uuid ( RO)                : 5bfbefea-9dc0-b541-93d0-fb2717f70752
+          name-label ( RW): Local storage
+    name-description ( RW): 
+                host ( RO): your-xcp-hostname
+                type ( RO): lvm
+        content-type ( RO): user
