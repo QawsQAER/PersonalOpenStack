@@ -36,70 +36,137 @@ else
 fi
 
 
-exit;
-
+read -p "CONFIGURE local setting?" yn
+case $yn in
+	[Yy]* )
+			echo "alias ls=\"ls --color\"" >> $HOME/.bashrc;
+			touch $HOME/.vimrc;
+			cat ":syntax on" >> $HOME/.vimrc;
+			;;
+	[Nn]* );;
+	*) echo "Please answer yes or no" ;;
+esac
+echo "CONFIGURE local setting DONE";
 # ---------------------------------------------------------------------------#
 # 1. Need to mount the LVM disk as ext3 disk
 # Reference: http://lukasz.cepowski.com/devlog/38,ovh-xenserver-convert-from-lvm-to-ext3
 
+#cat /proc/partitions
 #xe pbd-list sr-uuid=$SR_UUID
-xe pbd-unplug uuid=$PBD_UUID
-xe pbd-destroy uuid=$PBD_UUID
-xe sr-forget uuid=$SR_UUID
 #xe host-list
-xe sr-create host-uuid=$HOST_UUID shared=false type=ext content-type=user device-config:device=$DEV_PATH name-label="RAID1"
+read -p "CONFIGURE LOCAL DISK ?" yn
+case $yn in
+	[Yy]* )
+			xe pbd-unplug uuid=$PBD_UUID;
+			xe pbd-destroy uuid=$PBD_UUID;
+			xe sr-forget uuid=$SR_UUID;
+			xe sr-create host-uuid=$HOST_UUID shared=false type=ext content-type=user device-config:device=$DEV_PATH name-label="RAID1";
+			#TODO make the returning string of the last command as the NEW_SR_UUID
+			;;
+	[Nn]* );;
+	*) echo "Please answer yes or no" ;;
+esac
 
 cd $HOME
+
+
+# TODO: Also, need to set the default SR for xenserver.
+# xe pool-list
+# xe pool-param-set uuid=<pool-uuid> default-SR=$NEW_SR_UUID
+
 
 #-----------------------------#
 # 2. Install git
 # Reference: http://xenapiadmin.com/39-install-git-on-xcp-1-6
+read -p "INSTALL git ?" yn
+case $yn in
+	[Yy]* )
+			rpm -ivh http://mirror.itc.virginia.edu/fedora-epel/5/i386/epel-release-5-4.noarch.rpm
+			yum install git
+			sed -i 's/enabled=1/enabled=0/g' /etc/yum.repos.d/epel.repo
+			;;
+	[Nn]* );;
+	*) echo "Please answer yes or no" ;;
+esac
 
-rpm -ivh http://mirror.itc.virginia.edu/fedora-epel/5/i386/epel-release-5-4.noarch.rpm
-yum install git
-
-sed -i 's/enabled=1/enabled=0/g' /etc/yum.repos.d/epel.repo
 
 #-----------------------------#
-# 3. Install xen api plugins 
+# 3. Install xen api plugins
 # Reference: https://wiki.openstack.org/wiki/XenServer/PostInstall
-$NOVA_DIR=nova
-$PLUGIN_DEST=/etc/xapi.d/plugins
-
-git clone https://github.com/openstack/nova.git
-cd $NOVA_DIR/plugins/xenserver/xenapi/etc/xapi.d/plugins
-cp * $PLUGIN_DEST
-chmod a+x $PLUGIN_DEST/
+NOVA_DIR=nova
+PLUGIN_DEST=/etc/xapi.d/plugins
+read -p "INSTALL xen openstack api" yn
+case $yn in
+	[Yy]* )
+			git clone https://github.com/openstack/nova.git
+			cd $NOVA_DIR/plugins/xenserver/xenapi/etc/xapi.d/plugins
+			cp * $PLUGIN_DEST
+			chmod a+x $PLUGIN_DEST/
+			;;
+	[Nn]* );;
+	*) echo "Please answer yes or no" ;;
+esac
 
 cd $HOME
 
 #-----------------------------#
 # 4. Make a Required storage
 # Reference: https://wiki.openstack.org/wiki/XenServer/PostInstall
-mkdir /images
+read -p "make a new required storage" yn
+case $yn in
+	[Yy]* )
+			mkdir /images
+			;;
+	[Nn]* );;
+	*) echo "Please answer yes or no" ;;
+esac
+
 
 #-----------------------------#
 # 5. Install python 2.6
 # Reference: https://wiki.openstack.org/wiki/XenServer/PostInstall
+read -p "INSTALL python2.6 ?" yn
+case $yn in
+	[Yy]* )
+			wget http://dl.fedoraproject.org/pub/epel/5/i386/epel-release-5-4.noarch.rpm
+			rpm -Uvh epel-release-5-4.noarch.rpm
+			yum install python26-distribute
+			rpm -ev epel-release
+			rm -f epel-release-5-4.noarch.rpm
+			;;
+	[Nn]* );;
+	*) echo "Please answer yes or no" ;;
+esac
 
-wget http://dl.fedoraproject.org/pub/epel/5/i386/epel-release-5-4.noarch.rpm
-rpm -Uvh epel-release-5-4.noarch.rpm
-yum install python26-distribute
-rpm -ev epel-release
-rm -f epel-release-5-4.noarch.rpm
 
 #-----------------------------#
 # 6. Install pip and python-swiftclient & python-keystone client
-# Reference: https://wiki.openstack.org/wiki/XenServer/PostInstall 
-easy_install-2.6 pip
-pip install python-swiftclient python-keystoneclient
+# Reference: https://wiki.openstack.org/wiki/XenServer/PostInstall
+read -p "INSTALL pip and python openstack client ?" yn
+case $yn in
+	[Yy]* )
+			easy_install-2.6 pip
+			pip install python-swiftclient python-keystoneclient
+			;;
+	[Nn]* );;
+	*) echo "Please answer yes or no" ;;
+esac
+
 
 #-----------------------------#
 # 7. Add a user openstack to sudoer
-# 
-adduser openstack
-passwd openstack
-echo "openstack ALL=(ALL:ALL)	ALL" >> /etc/sudoers
-
+#
+read -p "add user openstack ?" yn
+case $yn in
+	[Yy]* )
+			echo "GOING TO add user"
+			read -p "PRESS ENTER TO CONTINUE"
+			adduser openstack
+			passwd openstack
+			echo "openstack ALL=(ALL:ALL)	ALL" >> /etc/sudoers
+			;;
+	[Nn]* );;
+	*) echo "Please answer yes or no" ;;
+esac
 
 exit;
