@@ -125,6 +125,9 @@ esac
 #-----------------------------#
 # 5. Install python 2.6
 # Reference: https://wiki.openstack.org/wiki/XenServer/PostInstall
+# This may not work, need to find a new way to do it.
+# wget http://download.fedoraproject.org/pub/epel/5/i386/epel-release-5-4.noarch.rpm
+# rpm -ivh epel-release-5-4.noarch.rpm
 read -p "INSTALL python2.6 ?" yn
 case $yn in
 	[Yy]* )
@@ -168,5 +171,11 @@ case $yn in
 	[Nn]* );;
 	*) echo "Please answer yes or no" ;;
 esac
+
+# 8. 
+# TODO:
+#-- Need to add SR for OpenStack Glance Image storage --#
+
+#-- --#
 
 exit;

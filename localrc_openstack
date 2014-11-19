@@ -1,0 +1,37 @@
+# At the moment, we depend on github's snapshot function.
+GIT_BASE="http://github.com"
+
+
+FIXED_RANGE=192.168.1.0/24
+FLOATING_RANGE=192.168.0.0/24
+FIXED_NETWORK_SIZE=256
+
+# Passwords
+# NOTE: these need to be specified, otherwise devstack will try
+# to prompt for these passwords, blocking the install process.
+
+MYSQL_PASSWORD=pass
+SERVICE_TOKEN=pass
+ADMIN_PASSWORD=pass
+SERVICE_PASSWORD=pass
+RABBIT_PASSWORD=pass
+SWIFT_HASH="66a3d6b56c1f479c8b4e70ab5c2000f5"
+# This will be the password for the OpenStack VM (both stack and root users)
+GUEST_PASSWORD=pass
+
+#-- possible setting for sahara --#
+
+#enable_service s-proxy s-object s-container s-account
+#SWIFT_REPLICAS=1
+
+#-------AUTO ASSIGN FLOATING IP ENABLE, POSSIBLE PROBLEM HERE-------#
+#EXTRA_OPTS=(auto_assign_floating_ip=True)
+
+#LOGFILE=/opt/stack/logs/stack.sh.log
+#VERBOSE=True
+#LOG_COLOR=False
+#SCREEN_LOGDIR=/opt/stack/logs
+#ENABLED_SERVICES+=,sahara
+
+#-- possible setting for sahara --#
+

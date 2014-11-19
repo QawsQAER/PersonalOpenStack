@@ -1,7 +1,6 @@
 # At the moment, we depend on github's snapshot function.
 GIT_BASE="http://github.com"
 
-DEST=/home/openstack/stack
 
 FIXED_RANGE=192.168.1.0/24
 FLOATING_RANGE=192.168.0.0/24
@@ -41,3 +40,21 @@ MULTI_HOST=1
 
 # Give extra time for boot
 ACTIVE_TIMEOUT=45
+
+
+#-- possible setting for sahara --#
+
+#enable_service s-proxy s-object s-container s-account
+#SWIFT_REPLICAS=1
+
+#-------AUTO ASSIGN FLOATING IP ENABLE, POSSIBLE PROBLEM HERE-------#
+#EXTRA_OPTS=(auto_assign_floating_ip=True)
+
+#LOGFILE=/opt/stack/logs/stack.sh.log
+#VERBOSE=True
+#LOG_COLOR=False
+#SCREEN_LOGDIR=/opt/stack/logs
+#ENABLED_SERVICES+=,sahara
+
+#-- possible setting for sahara --#
+
