@@ -14,6 +14,7 @@ HOST_UUID=$1
 SR_UUID=$2
 PBD_UUID=$3
 DEV_PATH=$4
+FORCE=$5
 CUR_USR=`whoami`
 
 if [ $CUR_USR == "root" ]
@@ -35,8 +36,7 @@ else
 	exit;
 fi
 
-
-read -p "CONFIGURE local setting?" yn
+read -p "CONFIGURE local setting?" yn;
 case $yn in
 	[Yy]* )
 			echo "alias ls=\"ls --color\"" >> $HOME/.bashrc;
@@ -44,7 +44,7 @@ case $yn in
 			cat ":syntax on" >> $HOME/.vimrc;
 			;;
 	[Nn]* );;
-	*) echo "Please answer yes or no" ;;
+	*) echo "Please answer y or n" ;;
 esac
 echo "CONFIGURE local setting DONE";
 # ---------------------------------------------------------------------------#
@@ -64,7 +64,7 @@ case $yn in
 			#TODO make the returning string of the last command as the NEW_SR_UUID
 			;;
 	[Nn]* );;
-	*) echo "Please answer yes or no" ;;
+	*) echo "Please answer y or n" ;;
 esac
 
 cd $HOME
@@ -82,11 +82,13 @@ read -p "INSTALL git ?" yn
 case $yn in
 	[Yy]* )
 			rpm -ivh http://mirror.itc.virginia.edu/fedora-epel/5/i386/epel-release-5-4.noarch.rpm
+			yum --enablerepo=base --disablerepo=citrix install traceroute
+			yum install vim
 			yum install git
 			sed -i 's/enabled=1/enabled=0/g' /etc/yum.repos.d/epel.repo
 			;;
 	[Nn]* );;
-	*) echo "Please answer yes or no" ;;
+	*) echo "Please answer y or n" ;;
 esac
 
 
@@ -104,7 +106,7 @@ case $yn in
 			chmod a+x $PLUGIN_DEST/
 			;;
 	[Nn]* );;
-	*) echo "Please answer yes or no" ;;
+	*) echo "Please answer y or n" ;;
 esac
 
 cd $HOME
@@ -118,7 +120,7 @@ case $yn in
 			mkdir /images
 			;;
 	[Nn]* );;
-	*) echo "Please answer yes or no" ;;
+	*) echo "Please answer y or n" ;;
 esac
 
 
@@ -138,7 +140,7 @@ case $yn in
 			rm -f epel-release-5-4.noarch.rpm
 			;;
 	[Nn]* );;
-	*) echo "Please answer yes or no" ;;
+	*) echo "Please answer y or n" ;;
 esac
 
 
@@ -152,24 +154,22 @@ case $yn in
 			pip install python-swiftclient python-keystoneclient
 			;;
 	[Nn]* );;
-	*) echo "Please answer yes or no" ;;
+	*) echo "Please answer y or n" ;;
 esac
 
-
 #-----------------------------#
-# 7. Add a user openstack to sudoer
-#
-read -p "add user openstack ?" yn
+# 7. get devstack
+read -p "git clone devstack?" yn
 case $yn in
 	[Yy]* )
-			echo "GOING TO add user"
-			read -p "PRESS ENTER TO CONTINUE"
-			adduser openstack
-			passwd openstack
-			echo "openstack ALL=(ALL:ALL)	ALL" >> /etc/sudoers
+			if [-d "devstack"]; then
+				echo "You already have devstack";;	
+			else
+				git clone https://github.com/openstack-dev/devstack
+			fi
 			;;
 	[Nn]* );;
-	*) echo "Please answer yes or no" ;;
+	*) echo "Please answer y or n";;
 esac
 
 # 8. 
