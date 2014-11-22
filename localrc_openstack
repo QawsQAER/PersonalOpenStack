@@ -9,8 +9,9 @@ FIXED_RANGE=192.168.1.0/24
 FIXED_NETWORK_SIZE=256
 
 #May try this to get floating ip address from a local dhcp server
-#FLOATING_RANGE=10.0.20.0/23
-FLOATING_RANGE=192.168.0.0/24
+#Currently statically assign 10.0.20.57 - 10.0.20.63 in public pool
+FLOATING_RANGE=10.0.20.56/29
+#FLOATING_RANGE=192.168.0.0/24
 #----NETWORK CONFIGURATION----#
 #-----------------------------#
 #-----------------------------#
@@ -48,4 +49,5 @@ GUEST_PASSWORD=pass
 #ENABLED_SERVICES+=,sahara
 
 #-- possible setting for sahara --#
+
 
