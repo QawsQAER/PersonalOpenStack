@@ -9,7 +9,6 @@
 #!
 
 
-
 HOST_UUID=$1
 SR_UUID=$2
 PBD_UUID=$3
